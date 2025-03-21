@@ -1,13 +1,14 @@
-# Audio and Video Generation Script
+# Audio, Image, and Video Generation Script
 
-This Python script allows you to generate audio (speech) and video content from text and image files. It leverages **Coqui AI** for text-to-speech (TTS) and **MoviePy** for video generation. Users can choose whether to generate audio, video, or both from files stored in separate folders.
+This Python script allows you to generate audio (speech), images, and video content from text and image files. It leverages **Coqui AI** for text-to-speech (TTS), **Stable Diffusion** for image generation, and **MoviePy** for video creation. Users can choose whether to generate audio, images, videos, or any combination of these using a bitwise selection method.
 
 ## Features
 
 - **Expressive Text-to-Speech (TTS)**: Converts `.txt` files into speech (audio) files with improved intonation and liveliness.
-- **Text-to-Video**: Generates videos by overlaying text on a screen, synchronized with the generated speech.
+- **Text-to-Image**: Generates images from text prompts using Stable Diffusion.
 - **Image-to-Video**: Converts images into videos with the generated speech as background audio.
 - **Automatic Video Merging**: Combines generated videos into a single final video with smooth transitions.
+- **Flexible Selection**: Users can choose processing options using bitwise selection (1 for audio, 2 for images, 4 for videos).
 
 ## Installation
 
@@ -15,8 +16,9 @@ This Python script allows you to generate audio (speech) and video content from 
 
 - **Python 3.10 or higher** is required for this script.
 - **Coqui TTS** for text-to-speech conversion.
+- **Stable Diffusion** for image generation.
 - **MoviePy** for video creation.
-- **eSpeak-NG** (or **eSpeak**) for phoneme processing in Coqui TTS.
+- **eSpeak-NG** for phoneme processing in Coqui TTS.
 - **ImageMagick** for advanced text rendering in MoviePy.
 
 ### Step 1: Clone the Repository
@@ -96,47 +98,46 @@ It is recommended to use a virtual environment to manage dependencies:
 Ensure the following folder structure exists in your project:
 
 ```
-audio-video-generation/
+audio-image-video-generation/
 │
-├── input/text/             # Folder containing text files for speech generation
-├── input/text/             # Folder containing text files for video generation (text overlay)
+├── input/text/             # Folder containing text files for speech and image generation
 ├── input/image/            # Folder containing image files for image-to-video generation
 │
 ├── output/speech/          # Output folder for speech (.wav files)
+├── output/image/           # Output folder for generated images
 ├── output/video/           # Output folder for video files (.mp4)
 ├── output/                 # Folder for final merged video
 ```
 
 ### Step 5: Running the Script
 
-1. **Generate Expressive Audio:**
-   ```bash
-   python generate_audio.py
-   ```
+Run the main script and select the desired operations using bitwise selection:
 
-2. **Generate Videos:**
-   ```bash
-   python generate_video.py
-   ```
+```bash
+python generate.py
+```
 
-3. **Merge Videos into a Final Video:**
-   ```bash
-   python combine_videos.py
-   ```
+You will be prompted to enter a choice based on bitwise operations:
+
+- `1` - Generate Audio
+- `2` - Generate Images
+- `4` - Generate Videos
+- You can sum values for multiple options, e.g., `3` (1+2) for Audio + Images, or `7` (1+2+4) for all.
 
 ### Output
 
-- **Speech**: The generated speech files (in `.wav` format) will be saved in the `speech/` folder.
-- **Video**: The generated video files (in `.mp4` format) will be saved in the `video/` folder.
-- **Final Merged Video**: The final compiled video will be saved in `final_video/` as `final_video.mp4`.
+- **Speech**: The generated speech files (in `.wav` format) will be saved in the `output/speech/` folder.
+- **Images**: The generated images (in `.png` format) will be saved in the `output/image/` folder.
+- **Video**: The generated video files (in `.mp4` format) will be saved in the `output/video/` folder.
+- **Final Merged Video**: The final compiled video will be saved in `output/` as `final_video.mp4`.
 
 ## How the Script Works
 
 ### 1. Expressive Text-to-Speech
 The script reads `.txt` files from `input/text/` and generates speech files (`.wav`) with improved intonation, adjusted speed, and energy for a livelier voice.
 
-### 2. Text-to-Video
-The script overlays text from `input/text/` on a video, synchronizing it with the generated speech audio.
+### 2. Text-to-Image
+The script generates images using **Stable Diffusion** from text prompts stored in `input/text/`.
 
 ### 3. Image-to-Video
 The script generates videos from images in `input/image/`, syncing them with the corresponding speech audio.
@@ -149,6 +150,7 @@ The generated videos are merged into a single final video with **1-second black 
 The script uses the following libraries:
 
 - **Coqui TTS**: Text-to-speech conversion with expressive voice parameters.
+- **Stable Diffusion**: AI-based image generation.
 - **MoviePy**: Video editing and generation.
 - **eSpeak-NG**: Required for Coqui TTS phoneme processing.
 - **ImageMagick**: Required for proper text rendering in MoviePy.
@@ -161,9 +163,12 @@ pip install -r requirements.txt
 `requirements.txt` should include:
 ```
 wheel
+accelerate
 TTS
+diffusers
 moviepy
-```
+torch
+```  
 
 ## License
 
@@ -172,3 +177,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contributing
 
 Feel free to fork this repository, submit issues, or open pull requests. If you have improvements or bug fixes, feel free to contribute!
+
